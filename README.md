@@ -17,7 +17,7 @@
 
 ---
 
-AI-CodeWise GitHub Action: Your AI-powered Code Reviewer! 🔍
+AI-CodeWise GitHub Action: Your AI-powered Code Reviewer!
 
 - 🧠 Triggers on pull requests, sending code diffs to StepSecurity API & using Azure OpenAI API for code analysis
 
@@ -82,8 +82,12 @@ Here are a few example pull requests with PR comments from AI-CodeWise
 4. [Python code](https://github.com/step-security/ai-codewise-demo/pull/4) vulnerable to server-side request forgery (SSRF)
 5. [C# code](https://github.com/step-security/ai-codewise-demo/pull/1) vulnerable to command injection
 
+## Support for private repositories
+
+To use AI-CodeWise on a private repository, please [join the beta](https://www.stepsecurity.io/contact).
+
 ## Limitations
 
 - AI-CodeWise will only review changes if the total number of file changes in a pull request is less than 10.
-- AI-CodeWise will only review changes if the total characters in the changes are less than 20K.
-- AI-CodeWise only works for public repositories as of now. To use on a private repository, please join the beta.
+- AI-CodeWise will only review changes in a file if the total characters in the diff is less than approximately 10K.
+
