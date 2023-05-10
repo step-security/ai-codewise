@@ -6,24 +6,22 @@
 
 <div align="center">
 
-[![Maintained by stepsecurity.io](https://img.shields.io/badge/maintained%20by-stepsecurity.io-blueviolet)](https://stepsecurity.io/?utm_source=github&utm_medium=organic_oss&utm_campaign=harden-runner)
-[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://raw.githubusercontent.com/step-security/harden-runner/main/LICENSE)
+[![Maintained by stepsecurity.io](https://img.shields.io/badge/maintained%20by-stepsecurity.io-blueviolet)](https://stepsecurity.io/?utm_source=github&utm_medium=organic_oss&utm_campaign=ai-codewise)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://raw.githubusercontent.com/step-security/ai-codewise/main/LICENSE)
 
 </div>
 
----
-
 <p align="center">
-AI-Powered Code Reviews for Best Practices & Security Issues Across Languages
+🦉 AI-Powered Code Reviews for Best Practices & Security Issues Across Languages
 </p>
 
-AI-CodeWise GitHub Action is an AI Code Reviewer.
+---
 
-- It is triggered on a pull request and sends the diff of the code files to the StepSecurity API, which then employs prompt engineering to call the Azure OpenAI API to review the code.
+AI-CodeWise GitHub Action: Your AI-powered Code Reviewer! 🔍
 
-- AI-CodeWise automatically adds a pull request comment using the StepSecurity bot account.
+- 💡 Triggers on pull requests, sending code diffs to StepSecurity API & using Azure OpenAI API for code analysis 🧠
 
-- The comment contains detailed information about the identified issues to improve code quality and address potential security vulnerabilities.
+- 📝 Pull request comments via StepSecurity bot, pinpointing issues to enhance code quality & tackle security risks 🔒
 
 <p align="center">
   <img src="images/sequence-diagram.png" alt="Sequence diagram">
@@ -52,35 +50,38 @@ jobs:
           disable-sudo: true
           egress-policy: block
           allowed-endpoints: >
-            api.github.com:443
-            int.api.stepsecurity.io:443
+            api.github.com:443            
 
       - name: Code Review
         uses: step-security/ai-codewise@v1
 ```
 
-When you create a pull request in the repository, the workflow will get triggered and add a pull request comment. Here is an screenshot of what the comment will look like:
+When you create a pull request in the repository, the workflow will get triggered and add a pull request comment. The comment will be added even if the pull request is from a fork. Here is an screenshot of what the comment will look like:
+
 <p align="center">
 <img src="images/sample-code-comment.png" width="600">
 </p>
 
 ## Comparison with existing SAST and IaC scanners
 
-AI-CodeWise differentiates itself from existing rule-based scanners by offering the following advantages:
+🌟 AI-CodeWise: Outshining rule-based scanners with:
 
-1. Comprehensive Code Review: AI-CodeWise is a single code reviewer tool that can detect code smells, best practice violations, and security issues. Furthermore, it does this across different programming languages, making it a versatile solution for your code review needs.
+1. All-in-One Review 🌐: Detects code smells, best practice violations, & security issues across languages for versatile code review.
 
-2. Unanticipated Issues Detection: By harnessing the power of AI, AI-CodeWise can identify potential problems that traditional rule-based systems may not have considered or anticipated. This ensures a more thorough code analysis and helps prevent potential vulnerabilities from slipping through the cracks.
+2. Unforeseen Issue Detection 🎯: AI-powered for discovering issues that rule-based systems might miss, ensuring thorough code analysis.
 
-3. Suggested Fixes: In addition to identifying issues, AI-CodeWise goes a step further by suggesting code changes to implement fixes directly in the PR comment. These actionable insights empower developers to resolve issues more efficiently, ultimately improving overall code quality and security.
+3. Fix Suggestions 🔧: Offers code change suggestions directly in PR comments, empowering devs to resolve issues efficiently, boosting code quality & security.
 
 ## Examples
 
 Here are a few example pull requests with PR comments from AI-CodeWise
 
-1.
-2.
-3.
+1.	[Terraform file](https://github.com/step-security/ai-codewise-demo/pull/2) with multiple security issues
+2.	[Java code](https://github.com/step-security/ai-codewise-demo/pull/5) vulnerable to XML external entities attacks
+3.	[JavaScript code](https://github.com/step-security/ai-codewise-demo/pull/3) vulnerable to open redirect
+4.	[Python code](https://github.com/step-security/ai-codewise-demo/pull/4) vulnerable to server-side request forgery (SSRF)
+5.	[C# code](https://github.com/step-security/ai-codewise-demo/pull/1) vulnerable to command injection
+
 
 ## Limitations
 
