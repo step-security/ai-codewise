@@ -19,9 +19,9 @@
 
 AI-CodeWise GitHub Action: Your AI-powered Code Reviewer! 🔍
 
-- 💡 Triggers on pull requests, sending code diffs to StepSecurity API & using Azure OpenAI API for code analysis 🧠
+- 🧠 Triggers on pull requests, sending code diffs to StepSecurity API & using Azure OpenAI API for code analysis
 
-- 📝 Pull request comments via StepSecurity bot, pinpointing issues to enhance code quality & tackle security risks 🔒
+- 🔒 Pull request comments via StepSecurity bot, pinpointing issues to enhance code quality & tackle security risks
 
 <p align="center">
   <img src="images/sequence-diagram.png" alt="Sequence diagram">
@@ -50,7 +50,7 @@ jobs:
           disable-sudo: true
           egress-policy: block
           allowed-endpoints: >
-            api.github.com:443            
+            api.github.com:443
 
       - name: Code Review
         uses: step-security/ai-codewise@v1
@@ -76,12 +76,11 @@ When you create a pull request in the repository, the workflow will get triggere
 
 Here are a few example pull requests with PR comments from AI-CodeWise
 
-1.	[Terraform file](https://github.com/step-security/ai-codewise-demo/pull/2) with multiple security issues
-2.	[Java code](https://github.com/step-security/ai-codewise-demo/pull/5) vulnerable to XML external entities attacks
-3.	[JavaScript code](https://github.com/step-security/ai-codewise-demo/pull/3) vulnerable to open redirect
-4.	[Python code](https://github.com/step-security/ai-codewise-demo/pull/4) vulnerable to server-side request forgery (SSRF)
-5.	[C# code](https://github.com/step-security/ai-codewise-demo/pull/1) vulnerable to command injection
-
+1. [Terraform file](https://github.com/step-security/ai-codewise-demo/pull/2) with multiple security issues
+2. [Java code](https://github.com/step-security/ai-codewise-demo/pull/5) vulnerable to XML external entities attacks
+3. [JavaScript code](https://github.com/step-security/ai-codewise-demo/pull/3) vulnerable to open redirect
+4. [Python code](https://github.com/step-security/ai-codewise-demo/pull/4) vulnerable to server-side request forgery (SSRF)
+5. [C# code](https://github.com/step-security/ai-codewise-demo/pull/1) vulnerable to command injection
 
 ## Limitations
 
