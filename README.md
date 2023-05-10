@@ -82,6 +82,10 @@ Here are a few example pull requests with PR comments from AI-CodeWise
 4. [Python code](https://github.com/step-security/ai-codewise-demo/pull/4) vulnerable to server-side request forgery (SSRF)
 5. [C# code](https://github.com/step-security/ai-codewise-demo/pull/1) vulnerable to command injection
 
+To try it out, you can also create a pull request in our demo repository.
+https://github.com/step-security/ai-codewise-demo 
+
+
 ## Support for private repositories
 
 To use AI-CodeWise on a private repository, please [join the beta](https://www.stepsecurity.io/contact).
