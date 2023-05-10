@@ -40,15 +40,6 @@ const (
 	OperationStatusError      = "Error"
 )
 
-func getTokenRemainingValidity(timestamp interface{}) float64 {
-	if validity, ok := timestamp.(float64); ok {
-		tm := time.Unix(int64(validity), 0)
-		remainder := time.Until(tm)
-		return remainder.Seconds()
-	}
-	return 0
-}
-
 func getGitHubClient() (*github.Client, context.Context, error) {
 	pat := os.Getenv("INPUT_PAT")
 	if len(pat) == 0 {
@@ -159,22 +150,12 @@ func getPullRequestDetailsFromEnvironment(isDebugMode bool) (*PullRequestDetails
 
 func submitPRDetailsAndGetCodeFeedback(prDetails *PullRequestDetails, isDebugMode bool) (bool, error) {
 	responseReceived := false
-	audience := APIEndpoint
-	oidcClient, err := DefaultOIDCClient(audience)
-	if err != nil {
-		return responseReceived, fmt.Errorf("error generating OIDC auth token. error:%v", err)
-	}
-
-	actionsJWT, exp, err := getActionsJWTAndExp(oidcClient, isDebugMode)
-	if err != nil {
-		return responseReceived, fmt.Errorf("error generating OIDC auth token. error:%v", err)
-	}
 
 	apiClient := ApiClient{
 		Client:     &http.Client{},
 		ApiBaseURI: APIEndpoint + "/v1/app/",
 	}
-	response, err := apiClient.SubmitCodeReviewRequest(actionsJWT.Value, prDetails)
+	response, err := apiClient.SubmitCodeReviewRequest(prDetails)
 	if err != nil {
 		return responseReceived, fmt.Errorf("error submitting code review request: %v", err)
 	}
@@ -185,15 +166,7 @@ func submitPRDetailsAndGetCodeFeedback(prDetails *PullRequestDetails, isDebugMod
 	var reviewComments *CodeReviewCommentsResponse
 
 	for i := 0; i < 20 && !responseReceived; i++ {
-		remainder := getTokenRemainingValidity(exp)
-		if remainder < 60 {
-			githubactions.Infof("Renewing OIDC token as it's only valid for %f", remainder)
-			actionsJWT, exp, err = getActionsJWTAndExp(oidcClient, isDebugMode)
-			if err != nil {
-				return responseReceived, fmt.Errorf("error renewing OIDC token. Error: %v", err)
-			}
-		}
-		reviewComments, err = apiClient.GetCodeReviewComments(actionsJWT.Value, response)
+		reviewComments, err = apiClient.GetCodeReviewComments(response)
 		if err != nil {
 			return responseReceived, fmt.Errorf("error retrieving code review comments: %v", err)
 		}
