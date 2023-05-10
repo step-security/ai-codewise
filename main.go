@@ -50,7 +50,7 @@ func getTokenRemainingValidity(timestamp interface{}) float64 {
 }
 
 func getGitHubClient() (*github.Client, context.Context, error) {
-	pat := os.Getenv("PAT")
+	pat := os.Getenv("INPUT_PAT")
 	if len(pat) == 0 {
 		return nil, nil, errors.New("a GitHub token must be passed as 'PAT' variable to the action")
 	}
@@ -65,7 +65,7 @@ func getGitHubClient() (*github.Client, context.Context, error) {
 
 func getDebugMode() bool {
 	isDebugMode := false
-	debugModeStr, exists := os.LookupEnv("DebugMode")
+	debugModeStr, exists := os.LookupEnv("INPUT_DEBUGMODE")
 
 	if exists {
 		debugMode, err := strconv.ParseBool(debugModeStr)
