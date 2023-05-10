@@ -1,10 +1,7 @@
 # AI-CodeWise
 
 <p align="center">
-<picture>
-  <source media="(prefers-color-scheme: light)" srcset="images/banner.png" width="400">
-  <img alt="Dark Banner" src="images/banner.png" width="400">
-</picture>
+  <img  src="images/banner.png" width="400">
 </p>
 
 <div align="center">
@@ -37,10 +34,36 @@ AI-CodeWise GitHub Action is an AI Code Reviewer.
 To use AI-CodeWise, add this GitHub Actions workflow to your repositories
 
 ```yaml
+name: Code Review
+on:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  code-review:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      id-token: write
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@128a63446a954579617e875aaab7d2978154e969 # v2.4.0
+        with:
+          disable-sudo: true
+          egress-policy: block
+          allowed-endpoints: >
+            api.github.com:443
+            int.api.stepsecurity.io:443
 
+      - name: Code Review
+        uses: step-security/ai-codewise@int
 ```
 
 When you create a pull request in the repository, the workflow will get triggered and add a pull request comment. Here is an screenshot of what the comment will look like:
+<p align="center">
+<img src="images/sample-code-comment.png" width="600">
+</p>
 
 ## Comparison with existing SAST and IaC scanners
 
