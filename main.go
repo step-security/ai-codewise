@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"os"
 	"strconv"
@@ -177,30 +176,7 @@ func submitPRDetailsAndGetCodeFeedback(prDetails *PullRequestDetails, isDebugMod
 			responseReceived = true
 			if reviewComments.Status == OperationStatusError {
 				message := fmt.Sprintf("Error while using StepSecurity AI Code Reviewer. \nError details:%s", reviewComments.Error)
-				client, ctx, err := getGitHubClient()
-				if err != nil {
-					return responseReceived, fmt.Errorf("error getting github client:%v", err)
-				}
-				comment := "COMMENT"
-				_, commentResponse, err := client.PullRequests.CreateReview(
-					ctx,
-					prDetails.GitHubAccountName,
-					prDetails.RepositoryName,
-					prDetails.PullNumber,
-					&github.PullRequestReviewRequest{
-						Body:  &message,
-						Event: &comment,
-					})
-				if err != nil {
-					errorMessage := fmt.Sprintf("Error writing comment on pull request: %v\n", err)
-					responseBody, err := ioutil.ReadAll(commentResponse.Body)
-					if err == nil {
-						errorMessage += fmt.Sprintf(" response body:%s", responseBody)
-					} else {
-						errorMessage += fmt.Sprintf(" could not retrieve response body for error details. error:%v", err)
-					}
-					return responseReceived, errors.New(errorMessage)
-				}
+				githubactions.Errorf(message)
 			}
 			break
 		}
@@ -232,22 +208,6 @@ func main() {
 
 	if !responseReceived {
 		message := "StepSecurity AI Code Reviewer request timed out after 10 minutes"
-		comment := "COMMENT"
-		client, ctx, err := getGitHubClient()
-		if err != nil {
-			githubactions.Errorf("error getting github client:%v", err)
-			return
-		}
-		client.PullRequests.CreateReview(
-			ctx,
-			prDetails.GitHubAccountName,
-			prDetails.RepositoryName,
-			prDetails.PullNumber,
-			&github.PullRequestReviewRequest{
-				Body:  &message,
-				Event: &comment,
-			})
-
 		githubactions.Fatalf(message)
 	}
 }
