@@ -33,20 +33,21 @@ func (apiclient *ApiClient) performRequest(method, url string, headers map[strin
 		return nil, err
 	}
 
-	for k, v := range headers {
-		req.Header.Add(k, v)
+	if headers != nil {
+		for key, value := range headers {
+			req.Header.Add(key, value)
+		}
 	}
 
 	return apiclient.Client.Do(req)
 }
 
-func (apiclient *ApiClient) SubmitCodeReviewRequest(oidcToken string, prDetails *PullRequestDetails) (*CodeReviewRequestResponse, error) {
+func (apiclient *ApiClient) SubmitCodeReviewRequest(prDetails *PullRequestDetails) (*CodeReviewRequestResponse, error) {
 	url := fmt.Sprintf("%s/codereview/submit", apiclient.ApiBaseURI)
 	jsonData, _ := json.Marshal(prDetails)
 
 	headers := map[string]string{
-		"Content-Type":  "application/json; charset=UTF-8",
-		"Authorization": fmt.Sprintf("Bearer %s", oidcToken),
+		"Content-Type": "application/json; charset=UTF-8",
 	}
 
 	resp, err := apiclient.performRequest("POST", url, headers, bytes.NewBuffer(jsonData))
@@ -69,14 +70,10 @@ func (apiclient *ApiClient) SubmitCodeReviewRequest(oidcToken string, prDetails 
 	return &codeReviewRequestResponse, nil
 }
 
-func (apiclient *ApiClient) GetCodeReviewComments(oidcToken string, request *CodeReviewRequestResponse) (*CodeReviewCommentsResponse, error) {
+func (apiclient *ApiClient) GetCodeReviewComments(request *CodeReviewRequestResponse) (*CodeReviewCommentsResponse, error) {
 	url := fmt.Sprintf("%s/codereview/comments?fullreponame=%s&codereviewid=%s", apiclient.ApiBaseURI, request.FullRepoName, request.CodeReviewID)
 
-	headers := map[string]string{
-		"Authorization": fmt.Sprintf("Bearer %s", oidcToken),
-	}
-
-	resp, err := apiclient.performRequest("GET", url, headers, nil)
+	resp, err := apiclient.performRequest("GET", url, nil, nil)
 	if err != nil {
 		return nil, err
 	}
