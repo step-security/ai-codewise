@@ -1,0 +1,60 @@
+name: Publish Container Image
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - int
+
+permissions: # added using https://github.com/step-security/secure-repo
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@128a63446a954579617e875aaab7d2978154e969 # v2.4.0
+        with:
+          egress-policy: block
+          allowed-endpoints: >
+            auth.docker.io:443
+            deb.debian.org:80
+            ghcr.io:443
+            github.com:443
+            production.cloudflare.docker.com:443
+            proxy.golang.org:443
+            registry-1.docker.io:443
+
+      - name: Checkout Code
+        uses: actions/checkout@master
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Publish to Registry (int)
+        uses: elgohr/Publish-Docker-Github-Action@v5
+        env:
+          API_ENDPOINT: "https://int.api.stepsecurity.io"
+        if: startsWith(github.ref, 'refs/heads/int')
+        with:
+          name: step-security/ai-codewise/int:latest
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ghcr.io
+          buildargs: API_ENDPOINT
+
+      - name: Publish to Registry (main)
+        uses: elgohr/Publish-Docker-Github-Action@v5
+        env:
+          API_ENDPOINT: "https://agent.api.stepsecurity.io"
+        if: startsWith(github.ref, 'refs/heads/main')
+        with:
+          name: step-security/ai-codewise/main:latest
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ghcr.io
+          buildargs: API_ENDPOINT

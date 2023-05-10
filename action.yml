@@ -1,0 +1,15 @@
+name: "StepSecurity AI-CodeWise action"
+description: "AI-Powered Code Reviews for Best Practices & Security Issues Across Languages"
+inputs:
+  PAT:
+    description: "INPUT: GitHub token with read access to read pull request changes"
+    required: false
+    default: ${{ github.token }}
+
+  DebugMode:
+    description: "INPUT: Flag to turn on the debug mode to print details to troubleshoot issues related to the action"
+    required: false
+    default: "false"
+runs:
+  using: "docker"
+  image: "docker://ghcr.io/step-security/ai-codewise/int:latest"
