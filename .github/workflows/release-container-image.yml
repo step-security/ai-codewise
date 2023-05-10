@@ -1,0 +1,47 @@
+name: Release Container Image
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag"
+        required: true
+
+permissions: # added using https://github.com/step-security/secure-repo
+  contents: read
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@128a63446a954579617e875aaab7d2978154e969 # v2.4.0
+        with:
+          disable-sudo: true
+          egress-policy: block
+          allowed-endpoints: >
+            deb.debian.org:80
+            ghcr.io:443
+            github.com:443
+            production.cloudflare.docker.com:443
+            proxy.golang.org:443
+            registry-1.docker.io:443
+            auth.docker.io:443
+
+      - name: Code Checkout
+        uses: actions/checkout@f095bcc56b7c2baf48f3ac70d6d6782f4f553222 # main
+
+      - name: Publish to registry
+        uses: elgohr/Publish-Docker-Github-Action@43dc228e327224b2eda11c8883232afd5b34943b # v5
+        env:
+          API_ENDPOINT: "https://agent.api.stepsecurity.io"
+        if: startsWith(github.ref, 'refs/heads/main')
+        with:
+          name: step-security/ai-codewise:${{ github.event.inputs.tag }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ghcr.io
+          buildargs: API_ENDPOINT

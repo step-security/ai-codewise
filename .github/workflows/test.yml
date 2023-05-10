@@ -1,0 +1,51 @@
+name: Test
+
+on:
+  pull_request:
+    branches:
+      - main
+      - int
+
+permissions: # added using https://github.com/step-security/secure-repo
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@128a63446a954579617e875aaab7d2978154e969 # v2.4.0
+        with:
+          egress-policy: audit
+
+      - name: Code Checkout
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+
+      - name: Set up Go
+        uses: actions/setup-go@6edd4406fa81c3da01a34fa6f6343087c207a568 # v3.5.0
+        with:
+          go-version: 1.19
+
+      - name: Build
+        run: go build -v ./...
+
+      - name: Test
+        run: go test -v ./...
+
+      - name: Build Container Image (int)
+        uses: elgohr/Publish-Docker-Github-Action@43dc228e327224b2eda11c8883232afd5b34943b # v5
+        env:
+          API_ENDPOINT: "https://int.api.stepsecurity.io"
+        if: startsWith(github.ref, 'refs/heads/int')
+        with:
+          no_push: true
+          buildargs: API_ENDPOINT
+
+      - name: Build Container Image (main)
+        uses: elgohr/Publish-Docker-Github-Action@43dc228e327224b2eda11c8883232afd5b34943b # v5
+        env:
+          API_ENDPOINT: "https://agent.api.stepsecurity.io"
+        if: startsWith(github.ref, 'refs/heads/main')
+        with:
+          no_push: true
+          buildargs: API_ENDPOINT
