@@ -57,7 +57,7 @@ jobs:
             int.api.stepsecurity.io:443
 
       - name: Code Review
-        uses: step-security/ai-codewise@int
+        uses: step-security/ai-codewise@v1
 ```
 
 When you create a pull request in the repository, the workflow will get triggered and add a pull request comment. Here is an screenshot of what the comment will look like:
