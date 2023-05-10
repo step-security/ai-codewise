@@ -31,12 +31,12 @@ jobs:
             registry-1.docker.io:443
 
       - name: Checkout Code
-        uses: actions/checkout@master
+        uses: actions/checkout@61b9e3751b92087fd0b06925ba6dd6314e06f089 # master
         with:
           ref: ${{ github.ref }}
 
       - name: Publish to Registry (int)
-        uses: elgohr/Publish-Docker-Github-Action@v5
+        uses: elgohr/Publish-Docker-Github-Action@43dc228e327224b2eda11c8883232afd5b34943b # v5
         env:
           API_ENDPOINT: "https://int.api.stepsecurity.io"
         if: startsWith(github.ref, 'refs/heads/int')
@@ -48,7 +48,7 @@ jobs:
           buildargs: API_ENDPOINT
 
       - name: Publish to Registry (main)
-        uses: elgohr/Publish-Docker-Github-Action@v5
+        uses: elgohr/Publish-Docker-Github-Action@43dc228e327224b2eda11c8883232afd5b34943b # v5
         env:
           API_ENDPOINT: "https://agent.api.stepsecurity.io"
         if: startsWith(github.ref, 'refs/heads/main')
