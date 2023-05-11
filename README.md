@@ -62,6 +62,8 @@ When you create a pull request in the repository, the workflow will get triggere
 <img src="images/sample-code-comment.png" width="600">
 </p>
 
+The bot solely generates code comments, it does not approve or block PRs based on its suggestions. The action passes once the code comments are posted in the PR discussion.
+
 ## Comparison with existing SAST and IaC scanners
 
 🌟 AI-CodeWise: Outshining rule-based scanners with:
