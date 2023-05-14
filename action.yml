@@ -12,4 +12,4 @@ inputs:
     default: "false"
 runs:
   using: "docker"
-  image: "docker://ghcr.io/step-security/ai-codewise:v1.0.0"
+  image: "docker://ghcr.io/step-security/ai-codewise/int:latest"
