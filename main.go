@@ -161,6 +161,11 @@ func submitPRDetailsAndGetCodeFeedback(prDetails *PullRequestDetails, isDebugMod
 	responseBytes, _ := json.Marshal(response)
 
 	printDebugMessageIfRequired(isDebugMode, "SubmitCodeReviewResponse:%s", string(responseBytes))
+
+	if response.ReviewSkipped {
+		printDebugMessageIfRequired(isDebugMode, "review skipped for the pr:%t", response.ReviewSkipped)
+		return true, nil
+	}
 	time.Sleep(20 * time.Second)
 	var reviewComments *CodeReviewCommentsResponse
 

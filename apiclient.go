@@ -17,9 +17,11 @@ type ApiClient struct {
 }
 
 type CodeReviewRequestResponse struct {
-	FullRepoName string `json:"full_repo_name"`
-	CodeReviewID string `json:"code_review_id"`
+	FullRepoName  string `json:"full_repo_name"`
+	CodeReviewID  string `json:"code_review_id"`
+	ReviewSkipped bool   `json:"review_skipped"`
 }
+
 type CodeReviewCommentsResponse struct {
 	Status          string `json:"status"`
 	Error           string `json:"error,omitempty"`
